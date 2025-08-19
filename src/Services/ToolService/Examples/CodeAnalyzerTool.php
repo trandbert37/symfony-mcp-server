@@ -58,6 +58,11 @@ class CodeAnalyzerTool implements SamplingAwareToolInterface
         return null;
     }
 
+    public function getOutputSchema(): array
+    {
+        return [];
+    }
+
     public function execute(array $arguments): ToolResultInterface
     {
         $code = $arguments['code'];

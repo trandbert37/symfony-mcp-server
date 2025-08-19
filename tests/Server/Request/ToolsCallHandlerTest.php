@@ -518,6 +518,11 @@ class ToolsCallHandlerTest extends TestCase
                 return new StructuredSchema;
             }
 
+            public function getOutputSchema(): array
+            {
+                return [];
+            }
+
             public function getAnnotations(): ToolAnnotation
             {
                 return new ToolAnnotation;
@@ -779,6 +784,11 @@ class ToolsCallHandlerTest extends TestCase
             public function getInputSchema(): StructuredSchema
             {
                 return new StructuredSchema;
+            }
+
+            public function getOutputSchema(): array
+            {
+                return [];
             }
 
             public function getAnnotations(): ToolAnnotation

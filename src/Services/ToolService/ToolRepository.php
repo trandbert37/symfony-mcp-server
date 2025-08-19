@@ -3,7 +3,6 @@
 namespace KLP\KlpMcpServer\Services\ToolService;
 
 use InvalidArgumentException;
-use KLP\KlpMcpServer\Services\ToolService\Schema\StructuredSchema;
 use stdClass;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
@@ -99,11 +98,9 @@ class ToolRepository
      * Retrieves a specific tool by its name.
      *
      * @param  string  $name  The name of the tool to retrieve.
-     * @return StreamableToolInterface|BaseToolInterface|null The tool instance if found, otherwise null.
-     *
-     * @todo Set return type to ?StreamableToolInterface on v2.0.0.
+     * @return StreamableToolInterface|null The tool instance if found, otherwise null.
      */
-    public function getTool(string $name): StreamableToolInterface|BaseToolInterface|null
+    public function getTool(string $name): ?StreamableToolInterface
     {
         return $this->tools[$name] ?? null;
     }
@@ -112,7 +109,7 @@ class ToolRepository
      * Generates an array of schemas for all registered tools, suitable for the MCP capabilities response.
      * Includes name, description, inputSchema, and optional annotations for each tool.
      *
-     * @return array<int, array{name: string, description: string, inputSchema: array<string, mixed>, annotations?: array<string, mixed>}> An array of tool schemas.
+     * @return array<int, array{name: string, description: string, inputSchema: array<string, mixed>, outputSchema: array<string, mixed>, annotations?: array<string, mixed>}> An array of tool schemas.
      */
     public function getToolSchemas(): array
     {
@@ -127,16 +124,12 @@ class ToolRepository
                     'required' => [],
                 ];
             }
-            $inputSchema = $tool->getInputSchema();
-            if (method_exists($tool, 'getOutputSchema')
-                && $outputSchema = $tool->getOutputSchema()) {
-                $injectArray['outputSchema'] = $outputSchema->asArray();
-            }
 
             $schemas[] = [
                 'name' => $tool->getName(),
                 'description' => $tool->getDescription(),
-                'inputSchema' => $inputSchema instanceof StructuredSchema ? $inputSchema->asArray() : $inputSchema,
+                'inputSchema' => $tool->getInputSchema(),
+                'outputSchema' => $tool->getOutputSchema(),
                 'annotations' => $tool->getAnnotations()->toArray(),
                 ...$injectArray,
             ];

@@ -169,10 +169,6 @@ class MigrateToolSchemaCommand extends Command
         return match ($jsonType) {
             'string' => 'STRING',
             'integer' => 'INTEGER',
-            'array' => 'ARRAY',
-            'boolean' => 'BOOLEAN',
-            'object' => 'OBJECT',
-            'number' => 'NUMBER',
             default => 'STRING', // Fallback for unsupported types
         };
     }
